@@ -1,32 +1,16 @@
-import React, { Component } from 'react';
-import Contact from './Contact';
+import React, { Component } from "react";
+import Contact from "./Contact";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { GET_CONTACTS } from "../../actions/types";
 
 class Contacts extends Component {
-  state = {
-    contacts: [
-      {
-        id: 1,
-        name: 'John Doe',
-        email: 'john@gmail.com',
-        phone: '555-555-5555'
-      },
-      {
-        id: 2,
-        name: 'Karen Williams',
-        email: 'karen@gmail.com',
-        phone: '444-444-4444'
-      },
-      {
-        id: 3,
-        name: 'Henry Johnson',
-        email: 'henry@gmail.com',
-        phone: '333-333-333'
-      }
-    ]
-  };
-
+  componentDidMount() {
+    // get initial contacts from Redux
+    this.props.getContacts();
+  }
   render() {
-    const { contacts } = this.state;
+    const { contacts } = this.props;
     return (
       <React.Fragment>
         <h1 className="display-4 mb-2">
@@ -40,4 +24,27 @@ class Contacts extends Component {
   }
 }
 
-export default Contacts;
+Contacts.propTypes = {
+  contacts: PropTypes.array.isRequired,
+  getContacts: PropTypes.func.isRequired
+};
+
+// get initial application state (chosen parts) to component's props
+// so this component can access App's State by using --> this.props.contacts
+
+// *** Explain: state.contact.contacts ***
+// state = application state (../reducers/index.js)
+// contact = application state choose from combineReducers (../reducers/index.js)
+// contacts = come from initialState/state in contactReducer.js (../reducers/contactReducer.js)
+const mapStateToProps = state => ({ contacts: state.contact.contacts });
+
+// get chosen actions to this component's props
+const mapDispatchToProps = dispatch => ({
+  getContacts: () => dispatch({ type: GET_CONTACTS })
+});
+
+// connect React and Redux
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Contacts);
