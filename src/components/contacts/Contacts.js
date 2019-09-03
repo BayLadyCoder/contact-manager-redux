@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Contact from "./Contact";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { GET_CONTACTS } from "../../actions/types";
+import { getContacts } from "../../actions/contactActions";
 
 class Contacts extends Component {
   componentDidMount() {
@@ -39,12 +39,14 @@ Contacts.propTypes = {
 const mapStateToProps = state => ({ contacts: state.contact.contacts });
 
 // get chosen actions to this component's props
-const mapDispatchToProps = dispatch => ({
-  getContacts: () => dispatch({ type: GET_CONTACTS })
-});
+// (NOW USING contactActions.js instead of mapDispatchToProps)
+// const mapDispatchToProps = dispatch => ({
+//   getContacts: () => dispatch({ type: GET_CONTACTS })
+// });
 
 // connect React and Redux
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  // mapDispatchToProps
+  { getContacts }
 )(Contacts);
